@@ -1,4 +1,4 @@
-# my_app
+# academic_collab_app
 
 A new Flutter project.
 
