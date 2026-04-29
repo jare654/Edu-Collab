@@ -5,6 +5,7 @@ import '../../core/models/user.dart';
 import '../../features/notifications/notifications_notifier.dart';
 import '../theme/app_theme.dart';
 import '../theme/app_tokens.dart';
+import '../theme/theme_mode_notifier.dart';
 import '../../features/auth/auth_notifier.dart';
 
 class AppTopBar extends StatelessWidget {
@@ -32,15 +33,23 @@ class AppTopBar extends StatelessWidget {
     final auth = context.watch<AuthNotifier?>();
     final user = auth?.user;
     final notifications = context.watch<NotificationsNotifier?>();
+    final themeMode = Provider.of<ThemeModeNotifier?>(context);
     final unreadCount = notifications?.items.length ?? 0;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceLow.withValues(alpha: 0.92),
+          color: isDark
+              ? const Color(0xDD0F172A)
+              : AppTheme.surfaceLow.withValues(alpha: 0.92),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppTheme.outline.withValues(alpha: 0.25)),
+          border: Border.all(
+            color: isDark
+                ? const Color(0xFF23314A)
+                : AppTheme.outline.withValues(alpha: 0.25),
+          ),
           boxShadow: AppElevations.soft,
         ),
         child: Row(
@@ -63,15 +72,29 @@ class AppTopBar extends StatelessWidget {
             if (showSearch)
               IconButton(
                 onPressed: onSearch,
-                icon: const Icon(Icons.search, color: AppTheme.textSecondary),
+                icon: Icon(
+                  Icons.search,
+                  color: isDark
+                      ? const Color(0xFFCBD5E1)
+                      : AppTheme.textSecondary,
+                ),
                 style: IconButton.styleFrom(
-                  backgroundColor: AppTheme.surfaceHigh,
+                  backgroundColor: isDark
+                      ? const Color(0xFF111A2A)
+                      : AppTheme.surfaceHigh,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.md),
                   ),
                 ),
               ),
             const SizedBox(width: 8),
+            if (themeMode != null) ...[
+              _ThemeToggleButton(
+                isDark: themeMode.isDarkMode,
+                onTap: themeMode.toggle,
+              ),
+              const SizedBox(width: 8),
+            ],
             _TopActionButton(
               icon: Icons.notifications_none_rounded,
               badgeCount: unreadCount,
@@ -98,6 +121,7 @@ class _TopBrand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Container(
@@ -119,7 +143,7 @@ class _TopBrand extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.asset(
-              'assets/images/academic_collab.png',
+              'assets/images/academic_collab_mark.png',
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => const Icon(
                 Icons.auto_awesome_mosaic,
@@ -143,10 +167,10 @@ class _TopBrand extends StatelessWidget {
             ),
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w800,
-                color: AppTheme.textPrimary,
+                color: isDark ? const Color(0xFFE2E8F0) : AppTheme.textPrimary,
                 letterSpacing: -0.4,
               ),
             ),
@@ -164,16 +188,15 @@ class _TopAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final child = avatarUrl != null && avatarUrl!.isNotEmpty
         ? ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: Image.network(
               avatarUrl!,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => const Icon(
-                Icons.person,
-                color: AppTheme.primary,
-              ),
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.person, color: AppTheme.primary),
             ),
           )
         : const Icon(Icons.person, color: AppTheme.primary);
@@ -181,7 +204,7 @@ class _TopAvatar extends StatelessWidget {
       height: 42,
       width: 42,
       decoration: BoxDecoration(
-        color: AppTheme.surfaceHigh,
+        color: isDark ? const Color(0xFF111A2A) : AppTheme.surfaceHigh,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.primary.withValues(alpha: 0.5)),
         boxShadow: [
@@ -202,22 +225,24 @@ class _TopActionButton extends StatelessWidget {
   final int badgeCount;
   final VoidCallback? onTap;
 
-  const _TopActionButton({
-    required this.icon,
-    this.badgeCount = 0,
-    this.onTap,
-  });
+  const _TopActionButton({required this.icon, this.badgeCount = 0, this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       clipBehavior: Clip.none,
       children: [
         IconButton(
           onPressed: onTap,
-          icon: Icon(icon, color: AppTheme.textSecondary),
+          icon: Icon(
+            icon,
+            color: isDark ? const Color(0xFFCBD5E1) : AppTheme.textSecondary,
+          ),
           style: IconButton.styleFrom(
-            backgroundColor: AppTheme.surfaceHigh,
+            backgroundColor: isDark
+                ? const Color(0xFF111A2A)
+                : AppTheme.surfaceHigh,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
@@ -252,6 +277,33 @@ class _TopActionButton extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _ThemeToggleButton extends StatelessWidget {
+  const _ThemeToggleButton({required this.isDark, required this.onTap});
+
+  final bool isDark;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final background = Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF111A2A)
+        : AppTheme.surfaceHigh;
+    return IconButton(
+      onPressed: onTap,
+      icon: Icon(
+        isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+        color: isDark ? const Color(0xFFF8FAFC) : AppTheme.textSecondary,
+      ),
+      style: IconButton.styleFrom(
+        backgroundColor: background,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+      ),
     );
   }
 }

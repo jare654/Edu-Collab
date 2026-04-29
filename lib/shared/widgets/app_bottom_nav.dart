@@ -16,14 +16,19 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       child: Container(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
         decoration: BoxDecoration(
-          color: AppTheme.surface,
+          color: isDark ? const Color(0xFF0F172A) : AppTheme.surface,
           borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: AppTheme.outline.withValues(alpha: 0.95)),
+          border: Border.all(
+            color: isDark
+                ? const Color(0xFF23314A)
+                : AppTheme.outline.withValues(alpha: 0.95),
+          ),
           boxShadow: const [
             BoxShadow(
               color: Color(0x161E3A8A),
@@ -66,14 +71,19 @@ class AppSideNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: 104,
       margin: const EdgeInsets.fromLTRB(16, 16, 12, 16),
       padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: isDark ? const Color(0xFF0F172A) : AppTheme.surface,
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: AppTheme.outline.withValues(alpha: 0.95)),
+        border: Border.all(
+          color: isDark
+              ? const Color(0xFF23314A)
+              : AppTheme.outline.withValues(alpha: 0.95),
+        ),
         boxShadow: const [
           BoxShadow(
             color: Color(0x121E3A8A),
@@ -134,10 +144,7 @@ class _BrandBadge extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFF1E3A8A),
-            Color(0xFF2563EB),
-          ],
+          colors: [Color(0xFF1E3A8A), Color(0xFF2563EB)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -154,10 +161,7 @@ class _BrandBadge extends StatelessWidget {
         child: DecoratedBox(
           decoration: const BoxDecoration(color: Colors.white),
           child: assetPath == null
-              ? const Icon(
-                  Icons.auto_awesome_mosaic,
-                  color: AppTheme.primary,
-                )
+              ? const Icon(Icons.auto_awesome_mosaic, color: AppTheme.primary)
               : Image.asset(
                   assetPath!,
                   fit: BoxFit.cover,
@@ -179,11 +183,7 @@ class NavItem {
 
   const NavItem(this.icon, this.label, {this.badgeCount = 0});
 
-  NavItem copyWith({
-    IconData? icon,
-    String? label,
-    int? badgeCount,
-  }) {
+  NavItem copyWith({IconData? icon, String? label, int? badgeCount}) {
     return NavItem(
       icon ?? this.icon,
       label ?? this.label,
@@ -268,13 +268,11 @@ class _SideNavButton extends StatelessWidget {
         width: 72,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: active
-              ? AppTheme.primary
-              : Colors.transparent,
+          color: active ? AppTheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: active 
-            ? Border.all(color: AppTheme.primary.withValues(alpha: 0.95))
-            : null,
+          border: active
+              ? Border.all(color: AppTheme.primary.withValues(alpha: 0.95))
+              : null,
           boxShadow: active
               ? const [
                   BoxShadow(
@@ -312,11 +310,7 @@ class _NavIcon extends StatelessWidget {
   final Color color;
   final double size;
 
-  const _NavIcon({
-    required this.item,
-    required this.color,
-    required this.size,
-  });
+  const _NavIcon({required this.item, required this.color, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -329,14 +323,8 @@ class _NavIcon extends StatelessWidget {
             right: -8,
             top: -6,
             child: Container(
-              constraints: const BoxConstraints(
-                minWidth: 18,
-                minHeight: 18,
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 4,
-                vertical: 1,
-              ),
+              constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
               decoration: BoxDecoration(
                 color: AppTheme.primaryContainer,
                 shape: BoxShape.rectangle,

@@ -21,24 +21,33 @@ class AppBackgroundLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
-        Container(color: AppTheme.background),
+        Container(
+          color: isDark ? const Color(0xFF07111F) : AppTheme.background,
+        ),
         Positioned(
           top: -140,
           right: -100,
-          child: _GlowBlob(color: AppTheme.primary.withValues(alpha: 0.10), size: 360),
+          child: _GlowBlob(
+            color: AppTheme.primary.withValues(alpha: isDark ? 0.18 : 0.10),
+            size: 360,
+          ),
         ),
         Positioned(
           bottom: -100,
           left: -60,
-          child: _GlowBlob(color: AppTheme.secondary.withValues(alpha: 0.18), size: 320),
+          child: _GlowBlob(
+            color: AppTheme.secondary.withValues(alpha: isDark ? 0.26 : 0.18),
+            size: 320,
+          ),
         ),
         Positioned(
           top: MediaQuery.of(context).size.height * 0.16,
           right: 24,
           child: _RingHalo(
-            color: AppTheme.primary.withValues(alpha: 0.08),
+            color: AppTheme.primary.withValues(alpha: isDark ? 0.14 : 0.08),
             size: 180,
           ),
         ),
@@ -48,7 +57,7 @@ class AppBackgroundLayer extends StatelessWidget {
           child: Container(
             width: MediaQuery.of(context).size.width * 1.3,
             height: 1,
-            color: AppTheme.primary.withValues(alpha: 0.05),
+            color: AppTheme.primary.withValues(alpha: isDark ? 0.10 : 0.05),
           ),
         ),
         Positioned.fill(
@@ -59,9 +68,11 @@ class AppBackgroundLayer extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withValues(alpha: 0.18),
+                    (isDark ? Colors.white : Colors.white).withValues(
+                      alpha: isDark ? 0.05 : 0.18,
+                    ),
                     Colors.transparent,
-                    AppTheme.secondary.withValues(alpha: 0.07),
+                    AppTheme.secondary.withValues(alpha: isDark ? 0.10 : 0.07),
                   ],
                 ),
               ),
@@ -87,13 +98,7 @@ class _GlowBlob extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
-        boxShadow: [
-          BoxShadow(
-            color: color,
-            blurRadius: 140,
-            spreadRadius: 40,
-          ),
-        ],
+        boxShadow: [BoxShadow(color: color, blurRadius: 140, spreadRadius: 40)],
       ),
     );
   }
