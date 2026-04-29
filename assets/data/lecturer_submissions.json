@@ -1,0 +1,34 @@
+[
+  {
+    "id": "s1",
+    "assignmentId": "la1",
+    "studentName": "Hana Tesfaye",
+    "status": "Submitted • 2h ago",
+    "submittedAt": "2026-04-02T08:10:00.000Z",
+    "submitted": true
+  },
+  {
+    "id": "s2",
+    "assignmentId": "la1",
+    "studentName": "Abel Mekonnen",
+    "status": "Submitted • 5h ago",
+    "submittedAt": "2026-04-02T05:10:00.000Z",
+    "submitted": true
+  },
+  {
+    "id": "s3",
+    "assignmentId": "la1",
+    "studentName": "Tigist Kebede",
+    "status": "Missing • 2 days left",
+    "submittedAt": "2026-04-01T09:00:00.000Z",
+    "submitted": false
+  },
+  {
+    "id": "s4",
+    "assignmentId": "la2",
+    "studentName": "Liya Degu",
+    "status": "Submitted • 1d ago",
+    "submittedAt": "2026-04-01T11:00:00.000Z",
+    "submitted": true
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "r1",
+    "title": "Addis Ababa Urban Plan Archive",
+    "course": "ARCH-201",
+    "type": "PDF",
+    "availableOffline": true
+  },
+  {
+    "id": "r2",
+    "title": "Blue Nile Bridge Structures",
+    "course": "ENG-110",
+    "type": "DOC",
+    "availableOffline": false
+  },
+  {
+    "id": "r3",
+    "title": "Atelier Workshop Assets",
+    "course": "LAB-101",
+    "type": "ZIP",
+    "availableOffline": true
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "u1",
+    "name": "Dawit Bekele",
+    "email": "student@atelier.edu",
+    "password": "student123",
+    "role": "student"
+  },
+  {
+    "id": "u2",
+    "name": "Dr. Selamawit Girma",
+    "email": "lecturer@atelier.edu",
+    "password": "lecturer123",
+    "role": "lecturer"
+  }
+]

@@ -28,6 +28,7 @@ import 'features/lecturer/lecturer_submissions_notifier.dart';
 import 'features/meetings/meeting_service.dart';
 import 'features/meetings/meeting_logs_repository.dart';
 import 'shared/theme/app_theme.dart';
+import 'shared/theme/theme_mode_notifier.dart';
 import 'shared/widgets/app_background.dart';
 import 'core/data/json_asset_loader.dart';
 import 'core/storage/session_store.dart';
@@ -56,18 +57,15 @@ class AppRoot extends StatelessWidget {
         Provider(create: (_) => JsonAssetLoader()),
         Provider(create: (_) => SessionStore()),
         Provider(
-          create: (ctx) => ApiClient(
-            ApiConfig.baseUrl,
-            ctx.read<SessionStore>(),
-          ),
+          create: (ctx) =>
+              ApiClient(ApiConfig.baseUrl, ctx.read<SessionStore>()),
         ),
         ChangeNotifierProvider(create: (_) => ConnectivityService()),
         ChangeNotifierProvider(create: (_) => LocaleNotifier()),
+        ChangeNotifierProvider(create: (_) => ThemeModeNotifier()),
         Provider(
-          create: (ctx) => AssignmentsApi(
-            ctx.read<ApiClient>(),
-            ctx.read<SessionStore>(),
-          ),
+          create: (ctx) =>
+              AssignmentsApi(ctx.read<ApiClient>(), ctx.read<SessionStore>()),
         ),
         Provider(create: (_) => AssignmentsLocalCache()),
         Provider(
@@ -110,10 +108,7 @@ class AppRoot extends StatelessWidget {
         ),
         ProxyProvider<AuthNotifier, NotificationsRepository>(
           update: (ctx, auth, previous) =>
-              NotificationsRepository(
-                ctx.read<ApiClient>(),
-                auth,
-              ),
+              NotificationsRepository(ctx.read<ApiClient>(), auth),
         ),
         Provider(create: (_) => NotificationService()),
         ChangeNotifierProvider(create: (_) => EmailLogNotifier()),
@@ -124,14 +119,22 @@ class AppRoot extends StatelessWidget {
           create: (ctx) =>
               StudentAssignmentsNotifier(ctx.read<AssignmentsRepositoryImpl>()),
           update: (ctx, auth, previous) {
-            final notifier = previous ??
-                StudentAssignmentsNotifier(ctx.read<AssignmentsRepositoryImpl>());
+            final notifier =
+                previous ??
+                StudentAssignmentsNotifier(
+                  ctx.read<AssignmentsRepositoryImpl>(),
+                );
             notifier.ensureFreshForUser(auth.user?.id);
             return notifier;
           },
         ),
-        ChangeNotifierProxyProvider2<NotificationsRepository, AuthNotifier, NotificationsNotifier>(
-          create: (ctx) => NotificationsNotifier(ctx.read<NotificationsRepository>()),
+        ChangeNotifierProxyProvider2<
+          NotificationsRepository,
+          AuthNotifier,
+          NotificationsNotifier
+        >(
+          create: (ctx) =>
+              NotificationsNotifier(ctx.read<NotificationsRepository>()),
           update: (ctx, repo, auth, previous) {
             final notifier = previous ?? NotificationsNotifier(repo);
             notifier.updateRepository(repo);
@@ -140,7 +143,8 @@ class AppRoot extends StatelessWidget {
           },
         ),
         ChangeNotifierProvider(
-          create: (ctx) => GroupNotifier(ctx.read<GroupRepositoryImpl>())..load(),
+          create: (ctx) =>
+              GroupNotifier(ctx.read<GroupRepositoryImpl>())..load(),
         ),
         ChangeNotifierProvider(
           create: (ctx) =>
@@ -176,9 +180,12 @@ class AppRoot extends StatelessWidget {
         builder: (context) {
           final locale = context.watch<LocaleNotifier>().locale;
           final router = context.watch<GoRouter>();
+          final themeMode = context.watch<ThemeModeNotifier>().themeMode;
           return MaterialApp.router(
             title: 'Academic Collaboration',
             theme: AppTheme.light(),
+            darkTheme: AppTheme.dark(),
+            themeMode: themeMode,
             builder: (context, child) =>
                 AppBackground(child: child ?? const SizedBox.shrink()),
             locale: locale,

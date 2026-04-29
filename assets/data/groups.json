@@ -1,0 +1,5 @@
+[
+  { "id": "g1", "name": "Addis Heritage Studio", "courseCode": "ARCH-101", "members": 12 },
+  { "id": "g2", "name": "Bahir Dar Fabrication Lab", "courseCode": "FAB-204", "members": 8 },
+  { "id": "g3", "name": "Gondar Thesis Cohort", "courseCode": "THS-400", "members": 24 }
+]

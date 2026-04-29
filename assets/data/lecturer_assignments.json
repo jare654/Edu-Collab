@@ -1,0 +1,34 @@
+[
+  {
+    "id": "la1",
+    "title": "Modernist Urbanism Case Study",
+    "course": "ARCH-302",
+    "submitted": 34,
+    "total": 52,
+    "isGroup": false
+  },
+  {
+    "id": "la2",
+    "title": "Addis Heritage Mapping",
+    "course": "URB-210",
+    "submitted": 22,
+    "total": 40,
+    "isGroup": false
+  },
+  {
+    "id": "la3",
+    "title": "Gondar Heritage Mapping",
+    "course": "ARCH-330",
+    "submitted": 12,
+    "total": 18,
+    "isGroup": true
+  },
+  {
+    "id": "la4",
+    "title": "Blue Nile Riverfront Study",
+    "course": "URB-210",
+    "submitted": 9,
+    "total": 14,
+    "isGroup": true
+  }
+]
