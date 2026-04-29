@@ -33,6 +33,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     final auth = context.read<AuthNotifier>();
     final loading = context.watch<AuthNotifier>().loading;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF0F172A) : AppTheme.surface;
+    final borderColor = isDark
+        ? const Color(0xFF23314A)
+        : AppTheme.outline.withValues(alpha: 0.9);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -45,16 +50,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppTheme.secondaryContainer,
-                      Colors.white,
+                      isDark
+                          ? const Color(0xFF172554)
+                          : AppTheme.secondaryContainer,
+                      isDark ? const Color(0xFF0F172A) : Colors.white,
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(
-                    color: AppTheme.outline.withValues(alpha: 0.9),
-                  ),
+                  border: Border.all(color: borderColor),
                   boxShadow: AppElevations.soft,
                 ),
                 child: const Center(
@@ -89,11 +94,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: AppTheme.surface,
+                  color: cardColor,
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(
-                    color: AppTheme.outline.withValues(alpha: 0.9),
-                  ),
+                  border: Border.all(color: borderColor),
                   boxShadow: AppElevations.soft,
                 ),
                 child: Row(
@@ -118,9 +121,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: AppTheme.surface,
+                  color: cardColor,
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(color: AppTheme.outline.withValues(alpha: 0.9)),
+                  border: Border.all(color: borderColor),
                   boxShadow: AppElevations.soft,
                 ),
                 child: Column(
@@ -206,21 +209,22 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   return;
                                 }
                                 try {
-                                    await auth.signUp(
-                                      email: email,
-                                      password: password,
-                                      fullName: name,
-                                      role: _isStudent ? 'student' : 'lecturer',
-                                    );
-                                    if (!context.mounted) return;
-                                    context.go('/verify');
-                                  } catch (_) {
-                                    if (!context.mounted) return;
-                                    setState(() {
-                                      _error = 'Unable to create account. Try again.';
-                                    });
-                                  }
-                                },
+                                  await auth.signUp(
+                                    email: email,
+                                    password: password,
+                                    fullName: name,
+                                    role: _isStudent ? 'student' : 'lecturer',
+                                  );
+                                  if (!context.mounted) return;
+                                  context.go('/verify');
+                                } catch (_) {
+                                  if (!context.mounted) return;
+                                  setState(() {
+                                    _error =
+                                        'Unable to create account. Try again.';
+                                  });
+                                }
+                              },
                         child: Text(
                           loading
                               ? context.tr('creating')

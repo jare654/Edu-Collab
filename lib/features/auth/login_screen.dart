@@ -30,6 +30,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final auth = context.read<AuthNotifier>();
     final loading = context.watch<AuthNotifier>().loading;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF0F172A) : AppTheme.surface;
+    final borderColor = isDark
+        ? const Color(0xFF23314A)
+        : AppTheme.outline.withValues(alpha: 0.9);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -41,9 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: AppTheme.surface,
+                  color: cardColor,
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(color: AppTheme.outline.withValues(alpha: 0.9)),
+                  border: Border.all(color: borderColor),
                   boxShadow: AppElevations.soft,
                 ),
                 child: Column(
@@ -82,9 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppTheme.surface,
+                  color: cardColor,
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(color: AppTheme.outline.withValues(alpha: 0.9)),
+                  border: Border.all(color: borderColor),
                   boxShadow: AppElevations.soft,
                 ),
                 child: Column(
@@ -175,10 +180,12 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceLow,
+                  color: isDark ? const Color(0xFF111A2A) : AppTheme.surfaceLow,
                   borderRadius: BorderRadius.circular(AppRadius.lg),
                   border: Border.all(
-                    color: AppTheme.outline.withValues(alpha: 0.35),
+                    color: isDark
+                        ? const Color(0xFF23314A)
+                        : AppTheme.outline.withValues(alpha: 0.35),
                   ),
                 ),
                 child: Row(

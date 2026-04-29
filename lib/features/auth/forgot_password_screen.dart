@@ -24,6 +24,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthNotifier>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark
+        ? const Color(0xFF23314A)
+        : AppTheme.outline.withValues(alpha: 0.9);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -35,10 +39,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.arrow_back, color: AppTheme.primary),
                 style: IconButton.styleFrom(
-                  backgroundColor: AppTheme.surfaceLow,
+                  backgroundColor: isDark
+                      ? const Color(0xFF111A2A)
+                      : AppTheme.surfaceLow,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.md),
                   ),
+                  side: BorderSide(color: borderColor),
                 ),
               ),
               const SizedBox(height: 12),
@@ -61,9 +68,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppTheme.surface,
+                  color: isDark ? const Color(0xFF0F172A) : AppTheme.surface,
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(color: AppTheme.outline.withValues(alpha: 0.9)),
+                  border: Border.all(color: borderColor),
                   boxShadow: AppElevations.soft,
                 ),
                 child: Column(
