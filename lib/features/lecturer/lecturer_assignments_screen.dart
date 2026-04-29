@@ -41,7 +41,13 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(context.tr('assignments'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+                Text(
+                  context.tr('assignments'),
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 ElevatedButton.icon(
                   onPressed: () => context.push('/lecturer/assignments/create'),
                   icon: const Icon(Icons.add),
@@ -56,11 +62,17 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(context.tr('individual_assignments'), style: const TextStyle(fontWeight: FontWeight.w700)),
+                  child: Text(
+                    context.tr('individual_assignments'),
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 if (notifier.loading)
-                  const Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()),
+                  const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: CircularProgressIndicator(),
+                  ),
                 if (notifier.error != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
@@ -81,7 +93,10 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
                 const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(context.tr('group_assignments'), style: const TextStyle(fontWeight: FontWeight.w700)),
+                  child: Text(
+                    context.tr('group_assignments'),
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 for (final a in group) _assignmentCard(context, a),
@@ -101,7 +116,9 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
   }
 
   Widget _assignmentCard(BuildContext context, LecturerAssignment assignment) {
-    final canResend = assignment.assignedEmails != null && assignment.assignedEmails!.isNotEmpty;
+    final canResend =
+        assignment.assignedEmails != null &&
+        assignment.assignedEmails!.isNotEmpty;
     final canDirectCall =
         FeatureFlags.enableVideoCalls &&
         !assignment.isGroup &&
@@ -112,10 +129,7 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            AppTheme.primaryContainer,
-            AppTheme.primary,
-          ],
+          colors: [AppTheme.primaryContainer, AppTheme.primary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -198,30 +212,42 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
                   ),
                 ),
               IconButton(
-                onPressed: () => context.push('/lecturer/assignments/${assignment.id}/submissions'),
-                icon: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
+                onPressed: () => context.push(
+                  '/lecturer/assignments/${assignment.id}/submissions',
+                ),
+                icon: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.white,
+                ),
               ),
               if (canResend)
                 TextButton(
                   onPressed: () async {
-                    final result = await context.read<LecturerAssignmentsNotifier>().resendEmails(assignment);
+                    final result = await context
+                        .read<LecturerAssignmentsNotifier>()
+                        .resendEmails(assignment);
                     if (!context.mounted) return;
                     context.read<EmailLogNotifier>().addEntry(
-                          EmailLogEntry(
-                            id: DateTime.now().millisecondsSinceEpoch.toString(),
-                            type: EmailLogType.assignment,
-                            recipient: assignment.assignedEmails?.join(', ') ?? '',
-                            subject: assignment.title,
-                            status: result.ok ? EmailLogStatus.sent : EmailLogStatus.failed,
-                            timestamp: DateTime.now(),
-                            message: result.message,
-                          ),
-                        );
+                      EmailLogEntry(
+                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                        type: EmailLogType.assignment,
+                        recipient: assignment.assignedEmails?.join(', ') ?? '',
+                        subject: assignment.title,
+                        status: result.ok
+                            ? EmailLogStatus.sent
+                            : EmailLogStatus.failed,
+                        timestamp: DateTime.now(),
+                        message: result.message,
+                      ),
+                    );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(result.ok
-                            ? context.tr('email_resend_success')
-                            : context.tr('email_resend_failed')),
+                        content: Text(
+                          result.ok
+                              ? context.tr('email_resend_success')
+                              : context.tr('email_resend_failed'),
+                        ),
                       ),
                     );
                   },
@@ -286,10 +312,7 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
                 ),
                 Text(
                   normalized,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Colors.white70,
-                  ),
+                  style: const TextStyle(fontSize: 11, color: Colors.white70),
                 ),
               ],
             ),
@@ -324,16 +347,10 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
         user: user,
         groupId: assignment.id,
       );
-    } catch (e) {
+    } catch (_) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${
-                context.tr('video_call_unavailable')
-              } ${e.toString()}',
-          ),
-        ),
+        SnackBar(content: Text(context.tr('call_unavailable_short'))),
       );
     } finally {
       if (mounted) {
@@ -385,9 +402,15 @@ class _LecturerAssignmentsScreenState extends State<LecturerAssignmentsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w700)),
+                Text(
+                  title,
+                  style: TextStyle(color: color, fontWeight: FontWeight.w700),
+                ),
                 const SizedBox(height: 2),
-                Text(body, style: const TextStyle(color: AppTheme.textSecondary)),
+                Text(
+                  body,
+                  style: const TextStyle(color: AppTheme.textSecondary),
+                ),
               ],
             ),
           ),
@@ -416,10 +439,16 @@ class _EmailLogPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.tr('email_delivery_log'), style: const TextStyle(fontWeight: FontWeight.w700)),
+          Text(
+            context.tr('email_delivery_log'),
+            style: const TextStyle(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           if (entries.isEmpty)
-            Text(context.tr('no_email_logs'), style: const TextStyle(color: AppTheme.textSecondary)),
+            Text(
+              context.tr('no_email_logs'),
+              style: const TextStyle(color: AppTheme.textSecondary),
+            ),
           for (final e in entries.take(4))
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,20 +458,30 @@ class _EmailLogPanel extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(
-                        e.status == EmailLogStatus.sent ? Icons.check_circle : Icons.error,
-                        color: e.status == EmailLogStatus.sent ? AppTheme.success : AppTheme.danger,
+                        e.status == EmailLogStatus.sent
+                            ? Icons.check_circle
+                            : Icons.error,
+                        color: e.status == EmailLogStatus.sent
+                            ? AppTheme.success
+                            : AppTheme.danger,
                         size: 16,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           '${e.recipient} • ${e.subject}',
-                          style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.textSecondary,
+                          ),
                         ),
                       ),
                       Text(
                         _shortTime(e.timestamp),
-                        style: const TextStyle(fontSize: 11, color: AppTheme.textTertiary),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppTheme.textTertiary,
+                        ),
                       ),
                     ],
                   ),
@@ -452,7 +491,10 @@ class _EmailLogPanel extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 24, bottom: 6),
                     child: Text(
                       e.message!,
-                      style: const TextStyle(fontSize: 11, color: AppTheme.textTertiary),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppTheme.textTertiary,
+                      ),
                     ),
                   ),
               ],

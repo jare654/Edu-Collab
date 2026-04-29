@@ -44,7 +44,8 @@ class LecturerScaffold extends StatelessWidget {
                         items: navItems,
                         onTap: onTap,
                         title: 'Academic\nCollab',
-                        brandAssetPath: 'assets/images/academic_collab.png',
+                        brandAssetPath:
+                            'assets/images/academic_collab_mark.png',
                       ),
                       Expanded(child: child),
                     ],
@@ -53,11 +54,7 @@ class LecturerScaffold extends StatelessWidget {
               : child,
           bottomNavigationBar: useRail
               ? null
-              : AppBottomNav(
-                  index: index,
-                  items: navItems,
-                  onTap: onTap,
-                ),
+              : AppBottomNav(index: index, items: navItems, onTap: onTap),
         );
       },
     );

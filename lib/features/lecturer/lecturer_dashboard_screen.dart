@@ -36,9 +36,7 @@ class LecturerDashboardScreen extends StatelessWidget {
                           Expanded(
                             flex: 7,
                             child: Column(
-                              children: [
-                                _focusAssignments(context),
-                              ],
+                              children: [_focusAssignments(context)],
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -77,56 +75,45 @@ class LecturerDashboardScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
-        gradient: LinearGradient(
-          colors: [
-            AppTheme.secondaryContainer,
-            AppTheme.surface,
-            Colors.white,
-          ],
-          stops: const [0.0, 0.42, 1.0],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.14)),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primary.withValues(alpha: 0.10),
-            blurRadius: 28,
-            spreadRadius: 2,
-          ),
-        ],
+        color: Colors.white,
+        border: Border.all(color: AppTheme.outline.withValues(alpha: 0.95)),
+        boxShadow: AppElevations.soft,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppTheme.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(AppRadius.pill),
-                ),
-                child: Text(
-                  context.tr(
-                    'welcome_back_name',
-                    params: {'name': displayName},
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
-                  style: const TextStyle(
-                    color: AppTheme.primaryContainer,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceLow,
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                  ),
+                  child: Text(
+                    context.tr(
+                      'welcome_back_name',
+                      params: {'name': displayName},
+                    ),
+                    style: const TextStyle(
+                      color: AppTheme.primaryContainer,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 12),
               Container(
                 height: 44,
                 width: 44,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                  border: Border.all(color: AppTheme.outline.withValues(alpha: 0.9)),
+                  color: AppTheme.surfaceLow,
                 ),
                 child: const Icon(
                   Icons.notifications_none_rounded,
@@ -135,13 +122,13 @@ class LecturerDashboardScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           Text(
             context.tr('dashboard'),
             style: const TextStyle(
-              fontSize: 32,
+              fontSize: 28,
               fontWeight: FontWeight.w800,
-              color: AppTheme.primaryContainer,
+              color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
@@ -219,14 +206,13 @@ class LecturerDashboardScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
                   gradient: LinearGradient(
-                    colors: [
-                      AppTheme.secondaryContainer,
-                      Colors.white,
-                    ],
+                    colors: [AppTheme.secondaryContainer, Colors.white],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  border: Border.all(color: AppTheme.outline.withValues(alpha: 0.8)),
+                  border: Border.all(
+                    color: AppTheme.outline.withValues(alpha: 0.8),
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -308,11 +294,7 @@ class LecturerDashboardScreen extends StatelessWidget {
             'Modernist Housing Analysis',
             '5h ago',
           ),
-          _submissionRow(
-            'Saron Mekuria',
-            'Public Space Typology',
-            '1d ago',
-          ),
+          _submissionRow('Saron Mekuria', 'Public Space Typology', '1d ago'),
         ],
       ),
     );
@@ -389,10 +371,7 @@ class LecturerDashboardScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: const TextStyle(
-              color: AppTheme.textSecondary,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
           ),
           const SizedBox(height: 14),
           child,
@@ -489,10 +468,7 @@ class LecturerDashboardScreen extends StatelessWidget {
           const SizedBox(height: 12),
           const Text(
             'Design and develop a functional Flutter experience with polished lecturer oversight and collaborative review flow.',
-            style: TextStyle(
-              color: Colors.white70,
-              height: 1.4,
-            ),
+            style: TextStyle(color: Colors.white70, height: 1.4),
           ),
           const SizedBox(height: 14),
           Row(

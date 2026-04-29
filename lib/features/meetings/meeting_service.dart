@@ -55,7 +55,8 @@ class MeetingService {
 
   Future<MeetingSession> _resolveSession(String groupId, User user) async {
     try {
-      return await _fetchActiveSession(groupId) ?? await _createSession(groupId, user);
+      return await _fetchActiveSession(groupId) ??
+          await _createSession(groupId, user);
     } on DioException catch (error) {
       if (_isMissingBackendError(error)) {
         _createdSession = false;
@@ -161,10 +162,7 @@ class MeetingService {
       '&userInfo.email=${Uri.encodeComponent(user.email)}',
     );
 
-    final launched = await launchUrl(
-      url,
-      webOnlyWindowName: '_blank',
-    );
+    final launched = await launchUrl(url, webOnlyWindowName: '_self');
     if (!launched) {
       throw StateError('Could not open meeting URL');
     }
@@ -252,10 +250,7 @@ class MeetingService {
     if (!isDirectChannelId(value)) return const [];
     final parts = value.split('__');
     if (parts.length < 3) return const [];
-    return [
-      Uri.decodeComponent(parts[1]),
-      Uri.decodeComponent(parts[2]),
-    ];
+    return [Uri.decodeComponent(parts[1]), Uri.decodeComponent(parts[2])];
   }
 
   String _buildDirectChannelId({

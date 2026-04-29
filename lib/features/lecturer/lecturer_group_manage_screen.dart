@@ -20,7 +20,8 @@ class LecturerGroupManageScreen extends StatefulWidget {
   const LecturerGroupManageScreen({super.key});
 
   @override
-  State<LecturerGroupManageScreen> createState() => _LecturerGroupManageScreenState();
+  State<LecturerGroupManageScreen> createState() =>
+      _LecturerGroupManageScreenState();
 }
 
 class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
@@ -52,13 +53,13 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
     setState(() => _startingCall = true);
     try {
       await context.read<MeetingService>().joinOrCreate(
-            groupId: groupId,
-            user: user,
-          );
+        groupId: groupId,
+        user: user,
+      );
     } catch (_) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to start group call right now.')),
+        SnackBar(content: Text(context.tr('call_unavailable_short'))),
       );
     } finally {
       if (mounted) {
@@ -67,7 +68,10 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
     }
   }
 
-  Future<void> _startDirectCall(BuildContext context, GroupMember member) async {
+  Future<void> _startDirectCall(
+    BuildContext context,
+    GroupMember member,
+  ) async {
     if (!FeatureFlags.enableVideoCalls) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Video calls are disabled by admin.')),
@@ -79,14 +83,14 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
     setState(() => _startingCall = true);
     try {
       await context.read<MeetingService>().joinOrCreateDirect(
-            peerEmail: member.email,
-            user: user,
-            groupId: _selectedGroupId,
-          );
+        peerEmail: member.email,
+        user: user,
+        groupId: _selectedGroupId,
+      );
     } catch (_) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to call ${member.email} right now.')),
+        SnackBar(content: Text(context.tr('call_unavailable_short'))),
       );
     } finally {
       if (mounted) {
@@ -101,7 +105,9 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
       _memberError = null;
     });
     try {
-      final members = await context.read<GroupRepositoryImpl>().fetchGroupMembers(groupId);
+      final members = await context
+          .read<GroupRepositoryImpl>()
+          .fetchGroupMembers(groupId);
       if (!context.mounted) return;
       setState(() => _members = members);
     } catch (_) {
@@ -118,9 +124,9 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
     final email = _emailController.text.trim();
     if (email.isEmpty) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.tr('enter_member_email'))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.tr('enter_member_email'))));
       return;
     }
     final groupId = _selectedGroupId;
@@ -135,29 +141,27 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
       final memberAddedMsg = context.tr('member_added_email_sent');
       final memberAddedFailMsg = context.tr('member_added_email_failed');
 
-      final result = await repo.addGroupMember(
-            groupId,
-            email,
-            sendEmail: true,
-          );
+      final result = await repo.addGroupMember(groupId, email, sendEmail: true);
       if (!context.mounted) return;
-      
+
       setState(() {
         _members = [result.member, ..._members];
         _emailController.clear();
       });
-      
+
       logNotifier.addEntry(
-            EmailLogEntry(
-              id: DateTime.now().millisecondsSinceEpoch.toString(),
-              type: EmailLogType.groupInvite,
-              recipient: email,
-              subject: inviteSubject,
-              status: result.emailSent ? EmailLogStatus.sent : EmailLogStatus.failed,
-              timestamp: DateTime.now(),
-              message: result.message,
-            ),
-          );
+        EmailLogEntry(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          type: EmailLogType.groupInvite,
+          recipient: email,
+          subject: inviteSubject,
+          status: result.emailSent
+              ? EmailLogStatus.sent
+              : EmailLogStatus.failed,
+          timestamp: DateTime.now(),
+          message: result.message,
+        ),
+      );
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -166,9 +170,9 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
       );
     } catch (_) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.tr('member_add_failed'))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.tr('member_add_failed'))));
     }
   }
 
@@ -176,7 +180,9 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
     try {
       await context.read<GroupRepositoryImpl>().removeGroupMember(member.id);
       if (!context.mounted) return;
-      setState(() => _members = _members.where((m) => m.id != member.id).toList());
+      setState(
+        () => _members = _members.where((m) => m.id != member.id).toList(),
+      );
     } catch (_) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -189,7 +195,9 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
   Widget build(BuildContext context) {
     final groups = context.watch<GroupNotifier>().items;
     final logs = context.watch<EmailLogNotifier>().entries;
-    final selected = _selectedGroupId == null && groups.isNotEmpty ? groups.first.id : _selectedGroupId;
+    final selected = _selectedGroupId == null && groups.isNotEmpty
+        ? groups.first.id
+        : _selectedGroupId;
     if (selected != _selectedGroupId && groups.isNotEmpty) {
       _selectedGroupId = selected;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -212,11 +220,18 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(context.tr('group_management'),
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+                Text(
+                  context.tr('group_management'),
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 const SizedBox(height: 6),
-                Text(context.tr('group_management_subtitle'),
-                    style: const TextStyle(color: AppTheme.textSecondary)),
+                Text(
+                  context.tr('group_management_subtitle'),
+                  style: const TextStyle(color: AppTheme.textSecondary),
+                ),
               ],
             ),
           ),
@@ -238,11 +253,15 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: _startingCall ? null : () => _startGroupCall(context),
+                  onPressed: _startingCall
+                      ? null
+                      : () => _startGroupCall(context),
                   icon: const Icon(Icons.video_call),
-                  label: Text(_startingCall
-                      ? context.tr('starting_call')
-                      : context.tr('start_group_call')),
+                  label: Text(
+                    _startingCall
+                        ? context.tr('starting_call')
+                        : context.tr('start_group_call'),
+                  ),
                 ),
               ),
             ),
@@ -271,7 +290,10 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
           if (_memberError != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Text(_memberError!, style: const TextStyle(color: AppTheme.danger)),
+              child: Text(
+                _memberError!,
+                style: const TextStyle(color: AppTheme.danger),
+              ),
             ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -340,29 +362,31 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
     final repo = context.read<GroupRepositoryImpl>();
     final logNotifier = context.read<EmailLogNotifier>();
     final inviteSubject = context.tr('group_invite_subject');
-    
+
     int success = 0;
     int failed = 0;
     for (final email in emails) {
       try {
         final result = await repo.addGroupMember(
-              groupId,
-              email,
-              sendEmail: true,
-            );
+          groupId,
+          email,
+          sendEmail: true,
+        );
         if (!context.mounted) return;
         _members = [result.member, ..._members];
         logNotifier.addEntry(
-              EmailLogEntry(
-                id: DateTime.now().millisecondsSinceEpoch.toString(),
-                type: EmailLogType.groupInvite,
-                recipient: email,
-                subject: inviteSubject,
-                status: result.emailSent ? EmailLogStatus.sent : EmailLogStatus.failed,
-                timestamp: DateTime.now(),
-                message: result.message,
-              ),
-            );
+          EmailLogEntry(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            type: EmailLogType.groupInvite,
+            recipient: email,
+            subject: inviteSubject,
+            status: result.emailSent
+                ? EmailLogStatus.sent
+                : EmailLogStatus.failed,
+            timestamp: DateTime.now(),
+            message: result.message,
+          ),
+        );
         success += 1;
       } catch (_) {
         failed += 1;
@@ -372,10 +396,15 @@ class _LecturerGroupManageScreenState extends State<LecturerGroupManageScreen> {
     setState(() {});
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.tr('csv_import_result', params: {
-          'success': success.toString(),
-          'failed': failed.toString(),
-        })),
+        content: Text(
+          context.tr(
+            'csv_import_result',
+            params: {
+              'success': success.toString(),
+              'failed': failed.toString(),
+            },
+          ),
+        ),
       ),
     );
   }
@@ -422,7 +451,12 @@ class _GroupSelector extends StatelessWidget {
         for (final g in groups)
           DropdownMenuItem(
             value: g.id,
-            child: Text(context.tr('group_option', params: {'course': g.courseCode, 'name': g.name})),
+            child: Text(
+              context.tr(
+                'group_option',
+                params: {'course': g.courseCode, 'name': g.name},
+              ),
+            ),
           ),
       ],
       onChanged: onChanged,
@@ -430,7 +464,10 @@ class _GroupSelector extends StatelessWidget {
         labelText: context.tr('select_group'),
         filled: true,
         fillColor: AppTheme.surfaceLow,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.lg), borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
@@ -455,7 +492,10 @@ class _MemberComposer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.tr('add_member'), style: const TextStyle(fontWeight: FontWeight.w700)),
+          Text(
+            context.tr('add_member'),
+            style: const TextStyle(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           TextField(
             controller: controller,
@@ -464,7 +504,10 @@ class _MemberComposer extends StatelessWidget {
               hintText: context.tr('member_email_hint'),
               filled: true,
               fillColor: AppTheme.surfaceLow,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppRadius.lg), borderSide: BorderSide.none),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -505,10 +548,16 @@ class _MemberCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CircleAvatar(backgroundColor: AppTheme.surfaceHigh, child: Icon(Icons.person, color: AppTheme.primary)),
+          const CircleAvatar(
+            backgroundColor: AppTheme.surfaceHigh,
+            child: Icon(Icons.person, color: AppTheme.primary),
+          ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(member.email, style: const TextStyle(fontWeight: FontWeight.w600)),
+            child: Text(
+              member.email,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
           if (onCall != null)
             IconButton(
@@ -595,10 +644,16 @@ class _EmailLogPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.tr('email_delivery_log'), style: const TextStyle(fontWeight: FontWeight.w700)),
+          Text(
+            context.tr('email_delivery_log'),
+            style: const TextStyle(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           if (entries.isEmpty)
-            Text(context.tr('no_email_logs'), style: const TextStyle(color: AppTheme.textSecondary)),
+            Text(
+              context.tr('no_email_logs'),
+              style: const TextStyle(color: AppTheme.textSecondary),
+            ),
           for (final e in entries.take(6))
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -608,20 +663,30 @@ class _EmailLogPanel extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(
-                        e.status == EmailLogStatus.sent ? Icons.check_circle : Icons.error,
-                        color: e.status == EmailLogStatus.sent ? AppTheme.success : AppTheme.danger,
+                        e.status == EmailLogStatus.sent
+                            ? Icons.check_circle
+                            : Icons.error,
+                        color: e.status == EmailLogStatus.sent
+                            ? AppTheme.success
+                            : AppTheme.danger,
                         size: 16,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           '${e.recipient} • ${e.subject}',
-                          style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.textSecondary,
+                          ),
                         ),
                       ),
                       Text(
                         _shortTime(e.timestamp),
-                        style: const TextStyle(fontSize: 11, color: AppTheme.textTertiary),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppTheme.textTertiary,
+                        ),
                       ),
                     ],
                   ),
@@ -631,7 +696,10 @@ class _EmailLogPanel extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 24, bottom: 6),
                     child: Text(
                       e.message!,
-                      style: const TextStyle(fontSize: 11, color: AppTheme.textTertiary),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppTheme.textTertiary,
+                      ),
                     ),
                   ),
               ],
