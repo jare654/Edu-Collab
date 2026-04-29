@@ -5,6 +5,8 @@ import '../../features/auth/forgot_password_screen.dart';
 import '../../features/auth/create_account_screen.dart';
 import '../../features/auth/verify_code_screen.dart';
 import '../../features/auth/start_screen.dart';
+import '../../features/auth/onboarding_screen.dart';
+import '../../features/auth/splash_screen.dart';
 import '../../features/assignments/assignment_detail_screen.dart';
 import '../../features/assignments/assignment_submission_screen.dart';
 import '../../features/assignments/student_assignments_screen.dart';
@@ -42,13 +44,15 @@ import '../../shared/widgets/lecturer_scaffold.dart';
 GoRouter createRouter(AuthNotifier auth) {
   return GoRouter(
     refreshListenable: auth,
-    initialLocation: '/start',
+    initialLocation: '/splash',
     redirect: (context, state) {
       if (auth.loading) return null;
       final loggedIn = auth.isAuthenticated;
       final loc = state.matchedLocation;
       if (!loggedIn) {
         if (loc == '/start' ||
+            loc == '/splash' ||
+            loc == '/onboarding' ||
             loc == '/login' ||
             loc == '/signup' ||
             loc == '/forgot-password' ||
@@ -58,6 +62,8 @@ GoRouter createRouter(AuthNotifier auth) {
         return '/start';
       }
       if (loc == '/start' ||
+          loc == '/splash' ||
+          loc == '/onboarding' ||
           loc == '/login' ||
           loc == '/signup' ||
           loc == '/verify') {
@@ -76,7 +82,12 @@ GoRouter createRouter(AuthNotifier auth) {
       return null;
     },
     routes: [
+      GoRoute(path: '/splash', builder: (context, _) => const SplashScreen()),
       GoRoute(path: '/start', builder: (context, _) => const StartScreen()),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, _) => const OnboardingScreen(),
+      ),
       GoRoute(path: '/login', builder: (context, _) => const LoginScreen()),
       GoRoute(
         path: '/signup',

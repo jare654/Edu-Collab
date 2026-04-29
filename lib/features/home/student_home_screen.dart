@@ -22,7 +22,9 @@ class StudentHomeScreen extends StatelessWidget {
     final resources = context.watch<ResourcesNotifier>().items;
     final notifications = context.watch<NotificationsNotifier?>();
     final meet = context.watch<MeetNotifier>();
-    final dueCount = assignments.where((a) => a.status == AssignmentStatus.upcoming).length;
+    final dueCount = assignments
+        .where((a) => a.status == AssignmentStatus.upcoming)
+        .length;
     final newAssignmentCount = notifications?.assignmentCount ?? 0;
     final user = context.watch<AuthNotifier?>()?.user;
     final displayName = user?.name ?? 'Student';
@@ -96,8 +98,10 @@ class StudentHomeScreen extends StatelessWidget {
                             width: double.infinity,
                           ),
                           const SizedBox(height: 16),
-                          if (meet.nextMeeting != null) _meetingPanel(context, meet),
-                          if (meet.nextMeeting != null) const SizedBox(height: 16),
+                          if (meet.nextMeeting != null)
+                            _meetingPanel(context, meet),
+                          if (meet.nextMeeting != null)
+                            const SizedBox(height: 16),
                           _quickActionsPanel(context),
                           const SizedBox(height: 16),
                           _focusPanel(
@@ -129,50 +133,63 @@ class StudentHomeScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
-        gradient: LinearGradient(
-          colors: [
-            AppTheme.secondaryContainer,
-            AppTheme.surface,
-            Colors.white,
-          ],
-          stops: const [0.0, 0.42, 1.0],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.14)),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primary.withValues(alpha: 0.10),
-            blurRadius: 28,
-            spreadRadius: 2,
-          ),
-        ],
+        color: Colors.white,
+        border: Border.all(color: AppTheme.outline.withValues(alpha: 0.95)),
+        boxShadow: AppElevations.soft,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppTheme.primary.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(AppRadius.pill),
-            ),
-            child: Text(
-              context.tr('good_morning', params: {'name': name}),
-              style: const TextStyle(
-                color: AppTheme.primaryContainer,
-                fontWeight: FontWeight.w700,
-                fontSize: 12,
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceLow,
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                  ),
+                  child: Text(
+                    context.tr('good_morning', params: {'name': name}),
+                    style: const TextStyle(
+                      color: AppTheme.primaryContainer,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                ),
+                child: Text(
+                  context.tr('open_assignments'),
+                  style: const TextStyle(
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           Text(
             context.tr('home'),
             style: const TextStyle(
-              fontSize: 32,
+              fontSize: 28,
               fontWeight: FontWeight.w800,
-              color: AppTheme.primaryContainer,
+              color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
@@ -211,9 +228,9 @@ class StudentHomeScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.surfaceLow,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppTheme.outline.withValues(alpha: 0.9)),
+          border: Border.all(color: AppTheme.outline.withValues(alpha: 0.7)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,10 +357,26 @@ class StudentHomeScreen extends StatelessWidget {
         spacing: 10,
         runSpacing: 10,
         children: [
-          _ActionChip(label: context.tr('schedule_session'), icon: Icons.calendar_today, onTap: () => context.push('/student/schedule_session')),
-          _ActionChip(label: context.tr('take_notes'), icon: Icons.edit_note, onTap: () => context.push('/student/notes')),
-          _ActionChip(label: context.tr('study_group'), icon: Icons.forum, onTap: () => context.push('/student/chat')),
-          _ActionChip(label: context.tr('bookmarks'), icon: Icons.star, onTap: () => context.push('/student/bookmarks')),
+          _ActionChip(
+            label: context.tr('schedule_session'),
+            icon: Icons.calendar_today,
+            onTap: () => context.push('/student/schedule_session'),
+          ),
+          _ActionChip(
+            label: context.tr('take_notes'),
+            icon: Icons.edit_note,
+            onTap: () => context.push('/student/notes'),
+          ),
+          _ActionChip(
+            label: context.tr('study_group'),
+            icon: Icons.forum,
+            onTap: () => context.push('/student/chat'),
+          ),
+          _ActionChip(
+            label: context.tr('bookmarks'),
+            icon: Icons.star,
+            onTap: () => context.push('/student/bookmarks'),
+          ),
         ],
       ),
     );
@@ -479,10 +512,7 @@ class StudentHomeScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            AppTheme.primaryContainer,
-            AppTheme.primary,
-          ],
+          colors: [AppTheme.primaryContainer, AppTheme.primary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -538,17 +568,17 @@ class StudentHomeScreen extends StatelessWidget {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(AppRadius.pill),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
+                  ),
+                  child: Text(
+                    context.tr('new_label'),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 10,
                     ),
-                    child: Text(
-                      context.tr('new_label'),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 10,
-                      ),
                   ),
                 ),
             ],
@@ -576,10 +606,7 @@ class StudentHomeScreen extends StatelessWidget {
                   ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.white70,
-              height: 1.4,
-            ),
+            style: const TextStyle(color: Colors.white70, height: 1.4),
           ),
           const SizedBox(height: 14),
           Row(
@@ -639,10 +666,7 @@ class StudentHomeScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            const Color(0xFF2E5FD0),
-            const Color(0xFF5D9CFF),
-          ],
+          colors: [const Color(0xFF2E5FD0), const Color(0xFF5D9CFF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -664,7 +688,10 @@ class StudentHomeScreen extends StatelessWidget {
             children: [
               Icon(icon, color: Colors.white),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.14),
                   borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -747,7 +774,11 @@ class _ActionChip extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _ActionChip({required this.label, required this.icon, required this.onTap});
+  const _ActionChip({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
