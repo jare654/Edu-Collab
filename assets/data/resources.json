@@ -19,5 +19,12 @@
     "course": "LAB-101",
     "type": "ZIP",
     "availableOffline": true
+  },
+  {
+    "id": "r4",
+    "title": "Ethiopian Heritage Sites",
+    "course": "HIST-101",
+    "type": "PDF",
+    "availableOffline": true
   }
 ]
