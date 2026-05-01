@@ -26,5 +26,12 @@
     "course": "URB-210",
     "dueDate": "2026-04-03T17:00:00.000Z",
     "status": "submitted"
+  },
+  {
+    "id": "a5",
+    "title": "Sustainable Architecture in Ethiopia",
+    "course": "ARCH-301",
+    "dueDate": "2026-05-20T17:00:00.000Z",
+    "status": "upcoming"
   }
 ]
