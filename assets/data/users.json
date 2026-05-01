@@ -12,5 +12,12 @@
     "email": "lecturer@atelier.edu",
     "password": "lecturer123",
     "role": "lecturer"
+  },
+  {
+    "id": "u3",
+    "name": "Demo Student",
+    "email": "demo@educollab.edu",
+    "password": "demo123",
+    "role": "student"
   }
 ]
