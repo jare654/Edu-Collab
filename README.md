@@ -2,7 +2,7 @@
 
 **Project Status: Beta - Feature Development**
 
-Empowering students and researchers to collaborate seamlessly on academic projects.
+Empowering students and researchers to collaborate seamlessly on academic projects. This application provides a unified platform for managing academic workflows, from initial research to final peer review.
 
 ## Features
 - Real-time collaborative editing

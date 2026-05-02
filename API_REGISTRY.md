@@ -1,5 +1,8 @@
 # API Endpoint Registry
 
+> **Status: Beta / In Development**
+> All endpoints listed here are subject to change during the beta phase.
+
 ## Authentication
 - POST /auth/v1/signup
 - POST /auth/v1/login
