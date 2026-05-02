@@ -12,3 +12,4 @@ The app follows a layered architecture with Flutter for the frontend and Supabas
 - Supabase Auth
 - PostgreSQL with PostgREST
 - Real-time subscriptions for collaboration
+- Cloud Integration (Planned/In Progress)
