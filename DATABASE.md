@@ -10,3 +10,7 @@
 - id: uuid
 - title: text
 - owner_id: uuid (FK)
+
+## Relationships
+- Users have many Projects
+- Projects have many Resources
