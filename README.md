@@ -1,5 +1,7 @@
 # Academic Collaboration App
 
+**Project Status: Beta - Feature Development**
+
 Empowering students and researchers to collaborate seamlessly on academic projects.
 
 ## Features
