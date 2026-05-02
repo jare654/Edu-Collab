@@ -1,5 +1,8 @@
 # Database Schema Documentation
 
+> **Notice:** The schema is currently in a state of rapid evolution.
+> Migrations may be non-destructive but are not guaranteed during Beta.
+
 ## Tables
 ### Users
 - id: uuid
