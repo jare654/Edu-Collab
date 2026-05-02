@@ -3,10 +3,11 @@
 ## Code of Conduct
 We follow the Contributor Covenant. Be respectful.
 
-## Branching Strategy
-- main: Production ready
-- develop: Integration
-- feature/*: New features
+## Branching Strategy (Beta)
+- `main`: Current stable Beta release
+- `develop`: Main development branch (Active)
+- `feature/*`: New feature development
+- `bugfix/*`: Critical Beta fixes
 
 ## PR Process
 1. Fork the repo
