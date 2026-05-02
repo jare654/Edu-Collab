@@ -11,9 +11,10 @@
 - `created_at`: timestamp (Auto-generated) [Beta-Draft]
 
 ### Projects
-- id: uuid
-- title: text
-- owner_id: uuid (FK)
+- `id`: uuid (PK)
+- `title`: text (Required)
+- `owner_id`: uuid (FK -> Users.id)
+- `description`: text (Optional) [Beta-Stable]
 
 ## Relationships
 - Users have many Projects
