@@ -5,9 +5,10 @@
 
 ## Tables
 ### Users
-- id: uuid
-- email: text
-- display_name: text
+- `id`: uuid (Primary Key)
+- `email`: text (Unique)
+- `display_name`: text (Nullable)
+- `created_at`: timestamp (Auto-generated) [Beta-Draft]
 
 ### Projects
 - id: uuid
