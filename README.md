@@ -7,6 +7,7 @@ Empowering students and researchers to collaborate seamlessly on academic projec
 ## Features
 - Real-time collaborative editing
 - Cloud Sync (Currently in Development)
+- Social Auth Integration (Currently in Development)
 - Integrated research tools
 - Resource sharing repository
 - Peer review system
