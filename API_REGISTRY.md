@@ -8,9 +8,10 @@
 - POST /auth/v1/login [Stable-Beta]
 - POST /auth/v1/logout [Experimental]
 
-## Collaborative Tools
-- GET /rest/v1/messages
-- POST /rest/v1/edits
+## Collaborative Tools (Experimental)
+- GET /rest/v1/messages [Active Development]
+- POST /rest/v1/edits [WIP - Breaking Changes Expected]
+- GET /rest/v1/presence [Draft]
 
 ## Error Handling
 - 401: Unauthorized
